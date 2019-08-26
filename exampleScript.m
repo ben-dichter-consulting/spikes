@@ -12,15 +12,15 @@
 
 %% add the repositories to your path
 
-addpath(genpath('C:\...\github\spikes'))
-addpath(genpath('C:\...\github\npy-matlab'))
+addpath(genpath('C:\Users\smali\Google Drive\DichterProject\spikes-master'))
+% addpath(genpath('C:\...\github\npy-matlab'))
 
 
 %% set paths for where to find your data
 
-myKsDir = 'C:\...\data\myKilosortOutputDirectory';
+myKsDir = 'C:\Users\smali\Google Drive\DichterProject\';
 
-myEventTimes = load('C:\...\data\someEventTimes.mat'); % a vector of times in seconds of some event to align to
+% myEventTimes = load('C:\...\data\someEventTimes.mat'); % a vector of times in seconds of some event to align to
 
 %% Loading data from kilosort/phy easily
 
@@ -56,7 +56,7 @@ nChansInFile = 385;  % neuropixels phase3a, from spikeGLX
 [lfpByChannel, allPowerEst, F, allPowerVar] = ...
     lfpBandPower(lfpFilename, lfpFs, nChansInFile, []);
 
-chanMap = readNPY(fullfile(myKsDir, 'channel_map.npy'));
+chanMap = readNWB(myKsDir, 'channel_map');
 nC = length(chanMap);
 
 allPowerEst = allPowerEst(:,chanMap+1)'; % now nChans x nFreq

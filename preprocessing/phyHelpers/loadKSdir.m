@@ -17,23 +17,23 @@ end
 
 % load spike data
 
-spikeStruct = loadParamsPy(fullfile(ksDir, 'params.py'));
+spikeStruct = loadParamsNWB(ksDir);
 
-ss = readNPY(fullfile(ksDir, 'spike_times.npy'));
+ss = readNWB(ksDir, 'spike_times');
 st = double(ss)/spikeStruct.sample_rate;
-spikeTemplates = readNPY(fullfile(ksDir, 'spike_templates.npy')); % note: zero-indexed
+spikeTemplates = readNWB(ksDir, 'spike_templates'); % note: zero-indexed
 
-if exist(fullfile(ksDir, 'spike_clusters.npy'))
-    clu = readNPY(fullfile(ksDir, 'spike_clusters.npy'));
+if exist(fullfile(ksDir, 'spike_clusters.npy'))                                %% CHANGE TO PROPER CHECK
+    clu = readNWB(ksDir, 'spike_clusters');
 else
     clu = spikeTemplates;
 end
 
-tempScalingAmps = readNPY(fullfile(ksDir, 'amplitudes.npy'));
+tempScalingAmps = readNWB(ksDir, 'amplitudes');
 
 if params.loadPCs
-    pcFeat = readNPY(fullfile(ksDir,'pc_features.npy')); % nSpikes x nFeatures x nLocalChannels
-    pcFeatInd = readNPY(fullfile(ksDir,'pc_feature_ind.npy')); % nTemplates x nLocalChannels
+    pcFeat = readNWB(ksDir,'pc_features'); % nSpikes x nFeatures x nLocalChannels
+    pcFeatInd = readNWB(ksDir,'pc_feature_ind'); % nTemplates x nLocalChannels
 else
     pcFeat = [];
     pcFeatInd = [];
@@ -76,11 +76,11 @@ else
 end
     
 
-coords = readNPY(fullfile(ksDir, 'channel_positions.npy'));
+coords = readNWB(ksDir, 'channel_positions');
 ycoords = coords(:,2); xcoords = coords(:,1);
-temps = readNPY(fullfile(ksDir, 'templates.npy'));
+temps = readNWB(ksDir, 'templates');
 
-winv = readNPY(fullfile(ksDir, 'whitening_mat_inv.npy'));
+winv = readNWB(ksDir, 'whitening_mat_inv');
 
 spikeStruct.st = st;
 spikeStruct.spikeTemplates = spikeTemplates;
