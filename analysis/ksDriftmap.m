@@ -45,7 +45,7 @@ spikeTimes = sp.st;
 %% compute center of mass of these features
 
 % which channels for each spike?
-spikeFeatInd = pcFeatInd(spikeTemps+1,:);
+spikeFeatInd = pcFeatInd(spikeTemps+1,:); 
 
 % ycoords of those channels?
 spikeFeatYcoords = ycoords(spikeFeatInd+1); % 2D matrix of size #spikes x 12

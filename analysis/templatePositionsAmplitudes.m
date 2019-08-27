@@ -45,7 +45,7 @@ threshVals = tempAmpsUnscaled*0.3;
 tempChanAmps(bsxfun(@lt, tempChanAmps, threshVals)) = 0;
 
 % ... in order to compute the depth as a center of mass
-templateDepths = sum(bsxfun(@times,tempChanAmps,ycoords'),2)./sum(tempChanAmps,2);
+templateDepths = sum(bsxfun(@times,double(tempChanAmps)',double(ycoords)'),2)./sum(tempChanAmps',2);
 
 % assign all spikes the amplitude of their template multiplied by their
 % scaling amplitudes (templates are zero-indexed)

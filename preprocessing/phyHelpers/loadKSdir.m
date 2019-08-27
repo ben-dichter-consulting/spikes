@@ -35,8 +35,10 @@ if params.loadPCs
     pcFeat = readNWB(ksDir,'pc_features'); % nSpikes x nFeatures x nLocalChannels
     pcFeatInd = readNWB(ksDir,'pc_feature_ind'); % nTemplates x nLocalChannels
 else
-    pcFeat = [];
-    pcFeatInd = [];
+%     pcFeat = [];
+%     pcFeatInd = [];
+    pcFeat = readNWB(ksDir,'pc_features'); % nSpikes x nFeatures x nLocalChannels
+    pcFeatInd = readNWB(ksDir,'pc_feature_ind'); % nTemplates x nLocalChannels
 end
 
 cgsFile = '';
@@ -85,7 +87,8 @@ winv = readNWB(ksDir, 'whitening_mat_inv');
 spikeStruct.st = st;
 spikeStruct.spikeTemplates = spikeTemplates;
 spikeStruct.clu = clu;
-spikeStruct.tempScalingAmps = tempScalingAmps;
+% spikeStruct.tempScalingAmps = tempScalingAmps;
+spikeStruct.tempScalingAmps = 1; %% faking this!!
 spikeStruct.cgs = cgs;
 spikeStruct.cids = cids;
 spikeStruct.xcoords = xcoords;

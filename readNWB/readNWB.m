@@ -23,8 +23,8 @@ switch desOut
         
     case 'spike_templates'                                                  %%TEMPORARILY REPLACED WITH spike_clusters
 %         data=nwb.units.waveform_mean.data.load;
-        vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
+        tempdata=values(nwb.units.vectordata);
+        data=load(tempdata{1, 1}.data);
         
     case 'spike_clusters' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
@@ -34,10 +34,20 @@ switch desOut
         data=[]; 
         
     case 'pc_features' % figure this out later % nSpikes x nFeatures x nLocalChannels
-        data='pc_features';
+%         tempdata=values(nwb.processing);
+%         spikesorted=values(tempdata{1, 1}.nwbdatainterface);
+%         data=load(spikesorted{1, 1}.id.data);
+
+        vectordata=nwb.units.vectordata.values;
+        data=nwb.units.id.data.load;
         
-    case 'pc_feature_ind' % figure this out later  % nTemplates x nLocalChannels
-        data='pc_feature_ind';
+    case 'pc_feature_ind' % nTemplates x nLocalChannels
+%         tempdata=values(nwb.processing);
+%         spikesorted=values(tempdata{1, 1}.nwbdatainterface);
+%         data=load(spikesorted{1, 1}.id.data);
+
+        vectordata=nwb.units.vectordata.values;
+        data=nwb.units.id.data.load;
         
     case 'cluster_groups' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
@@ -49,15 +59,15 @@ switch desOut
         
     case 'channel_positions'
         metadata=values(nwb.general_extracellular_ephys_electrodes.vectordata);
-        pos(1,:)=metadata{8}.data.load;
-        pos(2,:)=metadata{9}.data.load;
+        pos(:,1)=int32(metadata{6}.data.load);
+        pos(:,2)=int32(metadata{7}.data.load);
         data=pos;
         
     case 'templates'
         data=nwb.units.waveform_mean.data.load;
         
     case 'whitening_mat_inv' %what is this even??
-        data=[]; 
+        data=1;
         
     case 'channel_map' %just using x-y positions of channels
         metadata=values(nwb.general_extracellular_ephys_electrodes.vectordata);

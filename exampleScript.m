@@ -24,7 +24,7 @@ myKsDir = 'C:\Users\smali\Google Drive\DichterProject\';
 
 %% Loading data from kilosort/phy easily
 
-sp = loadKSdir(myKsDir)
+sp = loadKSdir(myKsDir);
 
 % sp.st are spike times in seconds
 % sp.clu are cluster identities
