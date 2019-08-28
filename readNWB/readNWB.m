@@ -1,6 +1,6 @@
 function data = readNWB(NWBdir, desOut)
 
-if ~exist('nwb') %only does the next part of the code if nwb does not exist in the workspace
+if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if nwb does not exist in the workspace
     %% get the NWB filename from existing vars
     nwbPathTemp=dir(fullfile(NWBdir, '*.nwb'));
     nwbPath=fullfile(nwbPathTemp.folder,nwbPathTemp.name);
@@ -13,7 +13,7 @@ if ~exist('nwb') %only does the next part of the code if nwb does not exist in t
         generateCore(fullfile(CoreDirTemp,'schema','core','nwb.namespace.yaml'));
     end
     %% Load NWB to matlab workspace
-    nwb = nwbRead(nwbPath);
+    nwb = nwbRead(nwbPath,'0');
 end
 
 %% pull correct data from the
