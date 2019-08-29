@@ -8,7 +8,8 @@ end
 
 clear params
 params.loadPCs = true;
-sp = loadKSdir(ksDir, params);
+% sp = loadKSdir(ksDir, params);
+sp=evalin('base', 'sp');
 
 if localizedSpikesOnly % go over all templates and check which are not localized (in space)
   localizedTemplates = false(size(sp.temps,1), 1);
@@ -45,13 +46,16 @@ spikeTimes = sp.st;
 %% compute center of mass of these features
 
 % which channels for each spike?
-spikeFeatInd = pcFeatInd(spikeTemps+1,:); 
+% spikeFeatInd = pcFeatInd(spikeTemps+1,:); 
+spikeFeatInd = sp.spikeTemplates; 
 
 % ycoords of those channels?
 spikeFeatYcoords = ycoords(spikeFeatInd+1); % 2D matrix of size #spikes x 12
+% spikeFeatYcoords = ycoords; % 2D matrix of size #spikes x 12
 
 % center of mass is sum(coords.*features)/sum(features)
-spikeDepths = sum(spikeFeatYcoords.*pcFeat.^2,2)./sum(pcFeat.^2,2);
+% spikeDepths = sum(spikeFeatYcoords.*pcFeat.^2,2)./sum(pcFeat.^2,2);
+spikeDepths =spikeFeatYcoords;
 
 
 %% for plotting, we need the amplitude of each spike, both so we can draw a

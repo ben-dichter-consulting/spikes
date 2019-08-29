@@ -14,66 +14,68 @@ if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if
     end
     %% Load NWB to matlab workspace
     nwb = nwbRead(nwbPath,'0');
+else
+    nwb = evalin('base', 'nwb');
 end
+
 
 %% pull correct data from the
 switch desOut
     case 'spike_times'
         data=nwb.units.spike_times.data.load;
         
-    case 'spike_templates'                                                  %%TEMPORARILY REPLACED WITH spike_clusters
-%         data=nwb.units.waveform_mean.data.load;
-        tempdata=values(nwb.units.vectordata);
-        data=load(tempdata{1, 1}.data);
+    case 'spike_templates'   %%FAKE DATA UNTIL NWB HAS IT
+        data=ceil(pullfrommat('sp.spikeTemplates')/2-3);
         
+    case 'cgs'   
+        tempdata=values(nwb.units.vectordata);
+        data=double(load(tempdata{1, 1}.data))';
+
     case 'spike_clusters' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
+%         data=nwb.units.id.data.load;
+        data=vectordata.data.load;
         
     case 'amplitudes' %does this exist in nwb
-        data=[]; 
+        data=pullfrommat('sp.tempScalingAmps');
         
     case 'pc_features' % figure this out later % nSpikes x nFeatures x nLocalChannels
-%         tempdata=values(nwb.processing);
-%         spikesorted=values(tempdata{1, 1}.nwbdatainterface);
-%         data=load(spikesorted{1, 1}.id.data);
-
+        vectordata=nwb.units.vectordata.values;
+        data=nwb.units.id.data.load;
+%         
+    case 'cids' % nTemplates x nLocalChannels
+        vectordata=nwb.units.vectordata.values;
+        data=double(nwb.units.id.data.load');        
+                
+    case 'pc_feature_ind' % nTemplates x nLocalChannels
         vectordata=nwb.units.vectordata.values;
         data=nwb.units.id.data.load;
         
-    case 'pc_feature_ind' % nTemplates x nLocalChannels
-%         tempdata=values(nwb.processing);
-%         spikesorted=values(tempdata{1, 1}.nwbdatainterface);
-%         data=load(spikesorted{1, 1}.id.data);
-
-        vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
         
     case 'cluster_groups' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
+        data=vectordata{1}.data.load;
         
     case 'cluster_group' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
+        data=vectordata{1}.data.load;
         
     case 'channel_positions'
         metadata=values(nwb.general_extracellular_ephys_electrodes.vectordata);
         pos(:,1)=int32(metadata{6}.data.load);
         pos(:,2)=int32(metadata{7}.data.load);
-        data=pos;
+        data=double(pos);
         
     case 'templates'
-        data=nwb.units.waveform_mean.data.load;
+%         data=nwb.units.waveform_mean.data.load;
+        data=pullfrommat('sp.temps');
+        
         
     case 'whitening_mat_inv' %what is this even??
         data=1;
         
     case 'channel_map' %just using x-y positions of channels
-        metadata=values(nwb.general_extracellular_ephys_electrodes.vectordata);
-        pos(1,:)=metadata{8}.data.load;
-        pos(2,:)=metadata{9}.data.load;
-        data=pos;
+        data=nwb.general_extracellular_ephys_electrodes.id.data.load;
         
     otherwise
         disp('don''t know what to pull from nwb file')

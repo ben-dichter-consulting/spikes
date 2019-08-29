@@ -38,7 +38,7 @@ figure; plotDriftmap(spikeTimes, spikeAmps, spikeDepths);
 %% basic quantification of spiking plot
 
 depthBins = 0:40:3840;
-ampBins = 0:30:min(max(spikeAmps),800);
+ampBins = 0:0.1:min(max(spikeAmps)/2,800);
 recordingDur = sp.st(end);
 
 [pdfs, cdfs] = computeWFampsOverDepth(spikeAmps, spikeDepths, ampBins, depthBins, recordingDur);
@@ -47,26 +47,26 @@ plotWFampCDFs(pdfs, cdfs, ampBins, depthBins);
 
 %% Plotting some basics about LFPs
 
-lfpD = dir(fullfile(myKsDir, '*.lf.bin')); % LFP file from spikeGLX specifically
-lfpFilename = fullfile(myKsDir, lfpD(1).name);
+% lfpD = dir(fullfile(myKsDir, '*.lf.bin')); % LFP file from spikeGLX specifically
+% lfpFilename = fullfile(myKsDir, lfpD(1).name);
 
 lfpFs = 2500;  % neuropixels phase3a
 nChansInFile = 385;  % neuropixels phase3a, from spikeGLX
 
-[lfpByChannel, allPowerEst, F, allPowerVar] = ...
-    lfpBandPower(lfpFilename, lfpFs, nChansInFile, []);
+% [lfpByChannel, allPowerEst, F, allPowerVar] = ...
+%     lfpBandPower(lfpFilename, lfpFs, nChansInFile, []);
 
 chanMap = readNWB(myKsDir, 'channel_map');
 nC = length(chanMap);
 
-allPowerEst = allPowerEst(:,chanMap+1)'; % now nChans x nFreq
+% allPowerEst = allPowerEst(:,chanMap+1)'; % now nChans x nFreq
 
 % plot LFP power
 dispRange = [0 100]; % Hz
 marginalChans = [10:50:nC];
 freqBands = {[1.5 4], [4 10], [10 30], [30 80], [80 200]};
 
-plotLFPpower(F, allPowerEst, dispRange, marginalChans, freqBands);
+% plotLFPpower(F, allPowerEst, dispRange, marginalChans, freqBands);
 
 %% Computing some useful details about spikes/neurons (like depths)
 
@@ -93,6 +93,12 @@ eventTimes = spikeGLXdigitalParse(syncDat, lfpFs);
 
 
 %% Looking at PSTHs aligned to some event
+
+%fake event times
+
+for i=1:length(eventTimes)
+    eventTimes(i,:)=[0.100 0.2 -0.7];
+end
 
 % if you now have a vector of relevant event times, called eventTimes (but
 % not the cell array as above, just a vector):

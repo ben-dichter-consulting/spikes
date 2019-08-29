@@ -45,7 +45,7 @@ threshVals = tempAmpsUnscaled*0.3;
 tempChanAmps(bsxfun(@lt, tempChanAmps, threshVals)) = 0;
 
 % ... in order to compute the depth as a center of mass
-templateDepths = sum(bsxfun(@times,double(tempChanAmps)',double(ycoords)'),2)./sum(tempChanAmps',2);
+templateDepths = sum(bsxfun(@times,double(tempChanAmps)',double(ycoords)),2)./sum(tempChanAmps',2);
 
 % assign all spikes the amplitude of their template multiplied by their
 % scaling amplitudes (templates are zero-indexed)
@@ -59,7 +59,8 @@ tempAmps(tids+1) = ta; % because ta only has entries for templates that had at l
 tempAmps = tempAmps'; % for consistency, make first dimension template number
 
 % Each spike's depth is the depth of its template
-spikeDepths = templateDepths(spikeTemplates+1);
+%spikeDepths = templateDepths(spikeTemplates+1);
+spikeDepths = templateDepths;
 
 % Get channel with largest amplitude, take that as the waveform
 [~,max_site] = max(max(abs(temps),[],2),[],3);
