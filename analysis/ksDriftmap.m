@@ -33,9 +33,9 @@ end
 
 ycoords = sp.ycoords;
 pcFeat = sp.pcFeat;
-pcFeat = squeeze(pcFeat(:,1,:)); % take first PC only
-pcFeat(pcFeat<0) = 0; % some entries are negative, but we don't really want to push the CoM away from there.
-pcFeatInd = sp.pcFeatInd;
+% pcFeat = squeeze(pcFeat(:,1,:)); % take first PC only
+% pcFeat(pcFeat<0) = 0; % some entries are negative, but we don't really want to push the CoM away from there.
+% pcFeatInd = sp.pcFeatInd;
 spikeTemps = sp.spikeTemplates;
 
 temps = sp.temps;
@@ -50,8 +50,8 @@ spikeTimes = sp.st;
 spikeFeatInd = sp.spikeTemplates; 
 
 % ycoords of those channels?
-spikeFeatYcoords = ycoords(spikeFeatInd+1); % 2D matrix of size #spikes x 12
-% spikeFeatYcoords = ycoords; % 2D matrix of size #spikes x 12
+% spikeFeatYcoords = ycoords(spikeFeatInd+1); % 2D matrix of size #spikes x 12
+spikeFeatYcoords = ycoords; % 2D matrix of size #spikes x 12
 
 % center of mass is sum(coords.*features)/sum(features)
 % spikeDepths = sum(spikeFeatYcoords.*pcFeat.^2,2)./sum(pcFeat.^2,2);

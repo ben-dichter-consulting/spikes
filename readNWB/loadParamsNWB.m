@@ -12,7 +12,8 @@ if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if
         generateCore(fullfile(CoreDirTemp,'schema','core','nwb.namespace.yaml'));
     end
     %% Load NWB to matlab workspace
-    nwb = nwbRead(nwbPath,'0');
+    nwb = nwbRead(nwbPath,'0');    
+    assignin('base','nwb',nwb)
 else
     nwb = evalin('base', 'nwb');
 end 

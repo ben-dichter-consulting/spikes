@@ -14,6 +14,7 @@ if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if
     end
     %% Load NWB to matlab workspace
     nwb = nwbRead(nwbPath,'0');
+    assignin('base','nwb',nwb)
 else
     nwb = evalin('base', 'nwb');
 end
@@ -25,7 +26,8 @@ switch desOut
         data=nwb.units.spike_times.data.load;
         
     case 'spike_templates'   %%FAKE DATA UNTIL NWB HAS IT
-        data=ceil(pullfrommat('sp.spikeTemplates')/2-3);
+%         data=ceil(pullfrommat('sp.spikeTemplates')/2-3);
+        data=ceil(pullfrommat('sp.spikeTemplates'));
         
     case 'cgs'   
         tempdata=values(nwb.units.vectordata);
@@ -68,8 +70,7 @@ switch desOut
         
     case 'templates'
 %         data=nwb.units.waveform_mean.data.load;
-        data=pullfrommat('sp.temps');
-        
+        data=pullfrommat('sp.temps');        
         
     case 'whitening_mat_inv' %what is this even??
         data=1;
@@ -80,28 +81,3 @@ switch desOut
     otherwise
         disp('don''t know what to pull from nwb file')
 end
-
-%% this is for reference as an output of old functions
-
-% 
-% spikeStruct.st = st;
-% spikeStruct.spikeTemplates = spikeTemplates;
-% spikeStruct.clu = clu;
-% spikeStruct.tempScalingAmps = tempScalingAmps;
-% spikeStruct.cgs = cgs;
-% spikeStruct.cids = cids;
-% spikeStruct.xcoords = xcoords;
-% spikeStruct.ycoords = ycoords;
-% spikeStruct.temps = temps;
-% spikeStruct.winv = winv;
-% spikeStruct.pcFeat = pcFeat;
-% spikeStruct.pcFeatInd = pcFeatInd;
-% 
-%     sp(q).spikeAmps = spikeAmps;
-%     sp(q).spikeDepths = spikeDepths;
-%     sp(q).templateYpos = templateYpos;
-%     sp(q).tempAmps = tempAmps;
-%     sp(q).tempsUnW = tempsUnW;
-%     sp(q).tempDur = tempDur;
-%     sp(q).tempPeakWF = tempPeakWF;
-    
