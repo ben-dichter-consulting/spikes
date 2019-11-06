@@ -26,8 +26,8 @@ else
     
     spikeStruct = loadParamsNWB(ksDir);
     
-    ss = readNWB(ksDir, 'spike_times');
-    st = double(ss)/spikeStruct.sample_rate;
+    st = readNWB(ksDir, 'spike_times');
+    %st = double(ss)/spikeStruct.sample_rate;
     spikeTemplates = readNWB(ksDir, 'spike_templates'); % note: zero-indexed
     
     % if exist(fullfile(ksDir, 'spike_clusters.npy'))                                %% CHANGE TO PROPER CHECK
@@ -83,7 +83,7 @@ else
     
     
     coords = readNWB(ksDir, 'channel_positions');
-    ycoords = coords(:,2); xcoords = coords(:,1);
+    ycoords = coords(:,2)'; xcoords = coords(:,1)';
     temps = readNWB(ksDir, 'templates');
     
     winv = readNWB(ksDir, 'whitening_mat_inv');

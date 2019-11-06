@@ -21,38 +21,45 @@ end
 
 
 %% pull correct data from the
+
 switch desOut
     case 'spike_times'
         data=nwb.units.spike_times.data.load;
         
     case 'spike_templates'   %%FAKE DATA UNTIL NWB HAS IT
-%         data=ceil(pullfrommat('sp.spikeTemplates')/2-3);
-        data=ceil(pullfrommat('sp.spikeTemplates'));
+        stind_temp=nwb.units.spike_times_index.loadAll;
+        stind=stind_temp.data;
+%         tempclus=values(nwb.units.vectordata);
+        id=nwb.units.id.data.load';
+        data(1:stind(1),1)=id(1);
+        for chan=2:length(stind)
+            data(stind(chan-1):stind(chan),1)=id(chan);
+        end
+
         
-    case 'cgs'   
+    case 'cgs'
         tempdata=values(nwb.units.vectordata);
         data=double(load(tempdata{1, 1}.data))';
-
+        
     case 'spike_clusters' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
-%         data=nwb.units.id.data.load;
         data=vectordata.data.load;
         
     case 'amplitudes' %does this exist in nwb
-        data=pullfrommat('sp.tempScalingAmps');
+        step1=nwb.processing.values;
+        step2=step1{1, 1}.nwbdatainterface.values;
+        step3=step2{1, 1}.vectordata.values;
+        data=step3{1, 1}.data.load;
         
     case 'pc_features' % figure this out later % nSpikes x nFeatures x nLocalChannels
-        vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
-%         
+        %         vectordata=nwb.units.vectordata.values;
+        %         data=nwb.units.id.data.load;
+        %
     case 'cids' % nTemplates x nLocalChannels
-        vectordata=nwb.units.vectordata.values;
-        data=double(nwb.units.id.data.load');        
-                
-    case 'pc_feature_ind' % nTemplates x nLocalChannels
-        vectordata=nwb.units.vectordata.values;
-        data=nwb.units.id.data.load;
+        data=double(nwb.units.id.data.load');
         
+    case 'pc_feature_ind' % nTemplates x nLocalChannels
+        data=nwb.units.id.data.load;
         
     case 'cluster_groups' %spike_clusters cluster_groups cluster_group are same right now
         vectordata=nwb.units.vectordata.values;
@@ -69,8 +76,9 @@ switch desOut
         data=double(pos);
         
     case 'templates'
-%         data=nwb.units.waveform_mean.data.load;
-        data=pullfrommat('sp.temps');        
+        %         data=pullfrommat('sp.temps'); %this is to pull from provided matlab file
+        temp=nwb.units.waveform_mean;
+        data=temp.data.load;
         
     case 'whitening_mat_inv' %what is this even??
         data=1;
@@ -81,3 +89,5 @@ switch desOut
     otherwise
         disp('don''t know what to pull from nwb file')
 end
+
+

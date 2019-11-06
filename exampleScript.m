@@ -12,13 +12,13 @@
 
 %% add the repositories to your path
 
-addpath(genpath('C:\Users\smali\Google Drive\DichterProject\spikes-master'))
+addpath(genpath('C:\Users\smali\Google Drive\DichterProject\spikes'))
 % addpath(genpath('C:\...\github\npy-matlab'))
 
 
 %% set paths for where to find your data
 
-myKsDir = 'C:\Users\smali\Google Drive\DichterProject\';
+myKsDir = 'G:\Google Drive\DichterProject';
 
 % myEventTimes = load('C:\...\data\someEventTimes.mat'); % a vector of times in seconds of some event to align to
 

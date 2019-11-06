@@ -25,7 +25,7 @@ S.dat_path=''; %not sure if this fiels is used so assigning it as empty
 S.n_channels_dat=size(metadata{1, 2}.data,1);
 S.dtype='double'; %not sure whether data type really matters here so assigning it as double
 S.offset=0;
-S.sample_rate = 30000; %can't find in nwb file, manually adding for now
+S.sample_rate = 30000; %figureoutsamplerate; %can't find in nwb file, manually adding for now
     if strcmp(metadata{1}.data.load(1),'The raw voltage signals from the electrodes were not high-pass filtered')
         S.hp_filtered = false;
     else
