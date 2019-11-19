@@ -6,11 +6,11 @@ addOptional(p,'NWBdir',defaultFolder,@isstring)
 addOptional(p,'save',dafaultSave)
 parse(p,varargin{:})
 NWBdir=p.Results.NWBdir;
+
+nwbPathTemp=dir(fullfile(NWBdir, '*.nwb'));
 if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if nwb does not exist in the workspace
-    %% get the NWB filename from existing vars
-    nwbPathTemp=dir(fullfile(NWBdir, '*.nwb'));
-    nwbPath=fullfile(nwbPathTemp.folder,nwbPathTemp.name);
-    
+    %% get the NWB filename from existing vars    
+    nwbPath=fullfile(nwbPathTemp.folder,nwbPathTemp.name);    
     %% check if core is generated, and if no, generate core
     [CoreDirTemp]=fileparts(which('nwbRead.m'));
     CoreDir=fullfile(CoreDirTemp, '+types','+core');
@@ -80,9 +80,7 @@ trial_contrast=step1{1, 1}.data.load;
 acquisition=nwb.acquisition.map.values;
 position=acquisition{1, 2}.spatialseries.values;
 posx=position{1, 2}.data.load;
-%% trial_gain 
-trial_gain=position{1, 1}.data.load./position{1, 2}.data.load;
-trial_gain(isnan(trial_gain))=1;
+
 %% trial
 zero_idx=(posx==0);
 beginnings=strfind(zero_idx',[0 1])+1;
@@ -90,6 +88,12 @@ beginnings=[1 beginnings length(zero_idx)];
 for trialcount=1:length(beginnings)-1
     trial(beginnings(trialcount):beginnings(trialcount+1))=trialcount;
 end
+trial=trial';
+%% trial_gain 
+unit_gain=position{1, 1}.data.load./position{1, 2}.data.load;
+[~,trial_switch_id]=unique(trial);
+trial_gain=unit_gain(trial_switch_id);
+trial_gain(isnan(trial_gain))=1;
 %% post
 post=((0:(length(posx)-1))*position{1, 1}.starting_time_rate)';
 %% lickx
@@ -98,7 +102,7 @@ lickx=behEvents{1, 1}.data.load;
 %% lickt
 lickt=behEvents{1, 1}.timestamps.load;
 if p.Results.save
-    name=nwbPathTemp.name;
+    name=[nwbPathTemp.name(1:end-4) '.mat'];
     save(name,'sp','lickt','lickx','post','posx','trial','trial_contrast','trial_gain')
 end
 end

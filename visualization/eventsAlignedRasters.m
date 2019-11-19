@@ -16,6 +16,7 @@ smoothWinStd = 0.01;
 smoothWin = myGaussWin(smoothWinStd, 1/psthBinSize);
 
 for e = 1:nEv
+    disp(e/nEv)
     subplot(3,nEv,[e e+nEv]); hold off
         
     for e2 = 1:nEv
