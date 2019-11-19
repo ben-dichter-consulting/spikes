@@ -1,6 +1,6 @@
 
 
-function spikeStruct = loadKSdir_legacy(ksDir, varargin)
+function spikeStruct = loadKSdir(ksDir, varargin)
 
 if ~isempty(varargin)
     params = varargin{1};

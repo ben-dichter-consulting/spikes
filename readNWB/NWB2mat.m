@@ -7,10 +7,21 @@ addOptional(p,'save',dafaultSave)
 parse(p,varargin{:})
 NWBdir=p.Results.NWBdir;
 
-nwbPathTemp=dir(fullfile(NWBdir, '*.nwb'));
 if ~ismember('nwb',evalin('base','who')) %only does the next part of the code if nwb does not exist in the workspace
     %% get the NWB filename from existing vars    
-    nwbPath=fullfile(nwbPathTemp.folder,nwbPathTemp.name);    
+    nwbPathTemp=dir(fullfile(NWBdir, '*.nwb')); 
+    filechoice=1;
+    
+    if size(nwbPathTemp,1)>1 % check if more than one NWB file exists
+        disp('More than one NWB file detected. Select which one you would like to use:')
+        for filenum=1:size(nwbPathTemp,1) 
+            nwbPathTemp(filenum).filenum=filenum;
+        end
+        arrayfun(@(x) disp([num2str(x.filenum) ': ' x.name]), nwbPathTemp)
+        filechoice=input('Select the number of the file: ');
+    end
+    
+    nwbPath=fullfile(nwbPathTemp(filechoice).folder,nwbPathTemp(filechoice).name);
     %% check if core is generated, and if no, generate core
     [CoreDirTemp]=fileparts(which('nwbRead.m'));
     CoreDir=fullfile(CoreDirTemp, '+types','+core');
