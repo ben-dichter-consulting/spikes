@@ -64,8 +64,8 @@ metadata=values(nwb.general_extracellular_ephys_electrodes.vectordata);
 pos(:,1)=int32(metadata{6}.data.load);
 pos(:,2)=int32(metadata{7}.data.load);
 coords=double(pos);
-sp.xcoords = coords(:,2);
-sp.ycoords = coords(:,1);
+sp.xcoords = coords(:,1);
+sp.ycoords = coords(:,2);
 
 temp=nwb.units.waveform_mean;
 temp2= temp.data.load;
@@ -106,12 +106,14 @@ unit_gain=position{1, 1}.data.load./position{1, 2}.data.load;
 trial_gain=unit_gain(trial_switch_id);
 trial_gain(isnan(trial_gain))=1;
 %% post
-post=((0:(length(posx)-1))*position{1, 1}.starting_time_rate)';
+post=((0:(length(posx)-1))*(1/position{1, 1}.starting_time_rate))';
 %% lickx
 behEvents=acquisition{1, 1}.timeseries.values;
 lickx=behEvents{1, 1}.data.load;
 %% lickt
 lickt=behEvents{1, 1}.timestamps.load;
+
+%% to save
 if p.Results.save
     name=[nwbPathTemp.name(1:end-4) '.mat'];
     save(name,'sp','lickt','lickx','post','posx','trial','trial_contrast','trial_gain')

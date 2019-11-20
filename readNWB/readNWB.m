@@ -29,13 +29,13 @@ switch desOut
     case 'spike_templates'   %%FAKE DATA UNTIL NWB HAS IT
         stind_temp=nwb.units.spike_times_index.loadAll;
         stind=stind_temp.data;
-%         tempclus=values(nwb.units.vectordata);
+        %         tempclus=values(nwb.units.vectordata);
         id=nwb.units.id.data.load';
         data(1:stind(1),1)=id(1);
         for chan=2:length(stind)
             data(stind(chan-1):stind(chan),1)=id(chan);
         end
-
+        
         
     case 'cgs'
         tempdata=values(nwb.units.vectordata);
@@ -76,12 +76,19 @@ switch desOut
         data=double(pos);
         
     case 'templates'
-        %         data=pullfrommat('sp.temps'); %this is to pull from provided matlab file
         temp=nwb.units.waveform_mean;
-        data=temp.data.load;
+        temp2= temp.data.load;
+        temp3 =permute(temp2, [3,2,1]);
+        % expanding the matrix to match bad units(?)
+        id=nwb.units.id.data.load+1;
+        data=zeros(max(id),size(temp3,2),size(temp3,3));
+        for units=1:length(id)
+            data(id(units),:,:)=temp3(units,:,:);
+        end
+        
         
     case 'whitening_mat_inv' %what is this even??
-        data=1;
+        data=pullfrommat('sp.winv'); %Where is the inverted mask?
         
     case 'channel_map' %just using x-y positions of channels
         data=nwb.general_extracellular_ephys_electrodes.id.data.load;

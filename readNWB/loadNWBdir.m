@@ -45,44 +45,13 @@ else
         pcFeatInd = [];
     end
     
-    % cgsFile = '';
-    % if exist(fullfile(ksDir, 'cluster_groups.csv'))
-    %     cgsFile = fullfile(ksDir, 'cluster_groups.csv');
-    % end
-    % if exist(fullfile(ksDir, 'cluster_group.tsv'))
-    %    cgsFile = fullfile(ksDir, 'cluster_group.tsv');
-    % end
-    % if ~isempty(cgsFile)
-    %     [cids, cgs] = readClusterGroupsCSV(cgsFile);
-    %
-    %     if params.excludeNoise
-    %         noiseClusters = cids(cgs==0);
-    %
-    %         st = st(~ismember(clu, noiseClusters));
-    %         spikeTemplates = spikeTemplates(~ismember(clu, noiseClusters));
-    %         tempScalingAmps = tempScalingAmps(~ismember(clu, noiseClusters));
-    %
-    %         if params.loadPCs
-    %             pcFeat = pcFeat(~ismember(clu, noiseClusters), :,:);
-    %             %pcFeatInd = pcFeatInd(~ismember(cids, noiseClusters),:);
-    %         end
-    %
-    %         clu = clu(~ismember(clu, noiseClusters));
-    %         cgs = cgs(~ismember(cids, noiseClusters));
-    %         cids = cids(~ismember(cids, noiseClusters));
-    %
-    %
-    %     end
-    %
-    % else
-    %     clu = spikeTemplates;
     cids = readNWB(ksDir,'cids');
     cgs = readNWB(ksDir,'cgs');
     % end
     
     
     coords = readNWB(ksDir, 'channel_positions');
-    ycoords = coords(:,2)'; xcoords = coords(:,1)';
+    ycoords = coords(:,2); xcoords = coords(:,1);
     temps = readNWB(ksDir, 'templates');
     
     winv = readNWB(ksDir, 'whitening_mat_inv');
